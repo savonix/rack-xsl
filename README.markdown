@@ -9,3 +9,11 @@ Configuration
     xslview '/path/alskjddf', 'test.xsl'
   end
 </pre>
+
+
+Resources
+---------
+
+* <http://github.com/docunext/Rack-XSLView>
+
+
