@@ -1,6 +1,8 @@
-= Rack XSLView README
+Rack XSLView README
+===================
 
-== Configuration
+Configuration
+-------------
 
 <pre class="sh_ruby">
   use Rack::XSLView do
