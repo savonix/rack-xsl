@@ -12,9 +12,14 @@ module Rack
     end
 
     def call(env)
+        @my_path_info = env["PATH_INFO"] 
         if env["PATH_INFO"].include? "/raw/"
             @app.call(env)
         else
+            # This is very picky here - needs "#{var}" for param value
+            if (mp = env["PATH_INFO"])
+              @xslt.parameters = { "my_path_info" => "#{mp}" }
+            end
             status, headers, @response = @app.call(env)
             [status, headers, self]
         end
