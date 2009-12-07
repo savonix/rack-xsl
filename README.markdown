@@ -1,6 +1,11 @@
 Rack XSLView README
 ===================
 
+Status
+------
+
+I'm using it, but its not ready for prime time yet, by a long shot.
+
 Configuration
 -------------
 
