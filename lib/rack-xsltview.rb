@@ -1,5 +1,3 @@
-require 'rack-xslview/xslt'
-
 module Rack
   class XSLView
     def initialize(app, options, &xslt_block)
