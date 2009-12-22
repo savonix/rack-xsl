@@ -1,3 +1,7 @@
+require 'xml/libxml'
+require 'xml/libxslt'
+
+
 module Rack
   class XSLView
     def initialize(app, options, &xslt_block)
@@ -6,7 +10,7 @@ module Rack
       @options = {:myxsl => nil}.merge(options)
       if @options[:myxsl] == nil
         @xslt = ::XML::XSLT.new()
-        @xslt.xsl = 'http://github.com/docunext/1bb02b59/raw/master/output.xhtml10.xsl'
+        @xslt.xsl = File.join(File.dirname(__FILE__), 'output.xhtml10.xsl')
       else
         @xslt = @options[:myxsl]
       end
