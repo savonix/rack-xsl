@@ -4,7 +4,7 @@ require 'xml/libxslt'
 
 module Rack
   class XSLView
-    def initialize(app, options, &xslt_block)
+    def initialize(app, options)
       @my_path_info = String.new
       @app = app
       @options = {:myxsl => nil}.merge(options)
@@ -38,6 +38,14 @@ module Rack
         }
     end
     private
+    def choosesheet(env)
+      @options[:xslhash].each_key { |path|
+        if env["PATH_INFO"].index(path)
+          return @options[:xslhash][path]
+        end
+      }
+      return false
+    end
     def checknoxsl(env)
       @options[:noxsl].each { |path|
         if env["PATH_INFO"].index(path)

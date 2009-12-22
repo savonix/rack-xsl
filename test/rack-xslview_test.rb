@@ -4,6 +4,7 @@ class RackXslviewTest < Test::Unit::TestCase
 
   def call_args(overrides={})
     {'REQUEST_URI' => '/rlksdjfkj', 'PATH_INFO' => '/notsure', 'QUERYSTRING' => ''}.merge(overrides)
+
   end
 
   def self.should_not_halt
@@ -22,6 +23,15 @@ class RackXslviewTest < Test::Unit::TestCase
       setup {
         omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
         @rack = Rack::XSLView.new(@app, :noxsl => omitpaths)
+      }
+      should_not_halt
+    end
+    context 'Trying out the xslhash' do
+      setup {
+        omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
+        xslhash = { "/path/alskjddf" => "test.xsl",  /specific\.xml$/ => 'different.xsl' }
+        xslhash.default("/path/to/output.xhtml10.xsl")
+        @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :xslhash => xslhash)
       }
       should_not_halt
     end

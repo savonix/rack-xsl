@@ -19,14 +19,14 @@ xslt = ::XML::XSLT.new()
 xslt.xsl = REXML::Document.new File.open('/path/to/output.xhtml10.xsl')
 
 # Paths to exclude
-omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
+noxsl = [/^\/raw/, '/s/js/', '/s/css/']
+
+# NOTE: multiple stylesheets is still in planning
+xslhash = { "/path/alskjddf" => "test.xsl",  /specific\.xml$/ => 'different.xsl' }
+xslhash.default("/path/to/output.xhtml10.xsl")
 
 # Use the middleware
-use Rack::XSLView, :myxsl => default_xsl, :noxsl => omitpaths do
-  # NOTE: multiple stylesheets is still in planning
-  xslview '/path/alskjddf', 'test.xsl'
-  xslview /specific\.xml$/, 'different.xsl'
-end
+use Rack::XSLView, :myxsl => default_xsl, :noxsl => noxsl, :xslhash => xslhash
 
 
 </pre>
