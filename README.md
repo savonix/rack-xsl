@@ -41,4 +41,4 @@ Resources
 Thanks
 ------
 
-The rack-rewrite gem was very helpful in figuring out how to write rack middleware with blocks.
+The rack-rewrite gem was very helpful in figuring out how to write rack middleware with lots of options.
