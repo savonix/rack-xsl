@@ -36,7 +36,7 @@ module Rack
     private
     def checknoxsl(env)
       @options[:noxsl].each { |path|
-        if env["PATH_INFO"].include? path
+        if env["PATH_INFO"].index(path)
           return true
         end
       }
