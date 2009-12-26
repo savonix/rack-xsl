@@ -7,6 +7,7 @@ module Rack
     def initialize(app, options)
       @my_path_info = String.new
       @app = app
+      @myhash = {}
       @options = {:myxsl => nil}.merge(options)
       if @options[:myxsl] == nil
         @xslt = ::XML::XSLT.new()
@@ -20,9 +21,13 @@ module Rack
       if checknoxsl(env)
         @app.call(env)
       else
-        if (mp = env["PATH_INFO"])
-          @xslt.parameters = { "my_path_info" => "#{mp}" }
-        end
+        @options[:passenv].each { |envkey|
+          if (mp = env[envkey])
+            @myhash[envkey] = "#{mp}"
+          end
+        }
+        puts @myhash
+        @xslt.parameters = @myhash
         status, headers, @response = @app.call(env)
         [status, headers, self]
       end
