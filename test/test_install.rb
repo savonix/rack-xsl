@@ -1,2 +1,2 @@
 require 'rubygems'
-require 'rack-xsltview'
+require 'rack-xslview'

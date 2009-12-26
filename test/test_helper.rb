@@ -7,7 +7,7 @@ require 'mocha'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rack-xsltview'
+require 'rack-xslview'
 
 class Test::Unit::TestCase
 end
