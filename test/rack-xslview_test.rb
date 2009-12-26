@@ -3,7 +3,7 @@ require 'test_helper'
 class RackXslviewTest < Test::Unit::TestCase
 
   def call_args(overrides={})
-    {'REQUEST_URI' => '/rlksdjfkj', 'PATH_INFO' => '/notsure', 'QUERYSTRING' => ''}.merge(overrides)
+    {'REQUEST_URI' => '/rlksdjfkj', 'PATH_INFO' => '/notsure', 'RACK_MOUNT_PATH' => '/something'}.merge(overrides)
 
   end
 
@@ -22,7 +22,8 @@ class RackXslviewTest < Test::Unit::TestCase
     context 'Still learning how to write these tests...' do
       setup {
         omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
-        @rack = Rack::XSLView.new(@app, :noxsl => omitpaths)
+        passenv = ['PATH_INFO', 'RACK_MOUNT_PATH']
+        @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :passenv => passenv)
       }
       should_not_halt
     end

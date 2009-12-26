@@ -21,12 +21,14 @@ module Rack
       if checknoxsl(env)
         @app.call(env)
       else
-        @options[:passenv].each { |envkey|
-          if (mp = env[envkey])
-            @myhash[envkey] = "#{mp}"
-          end
-        }
-        @xslt.parameters = @myhash
+        unless @options[:passenv] == nil
+          @options[:passenv].each { |envkey|
+            if (mp = env[envkey])
+              @myhash[envkey] = "#{mp}"
+            end
+          }
+          @xslt.parameters = @myhash
+        end
         status, headers, @response = @app.call(env)
         [status, headers, self]
       end
