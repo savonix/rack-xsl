@@ -26,7 +26,6 @@ module Rack
             @myhash[envkey] = "#{mp}"
           end
         }
-        puts @myhash
         @xslt.parameters = @myhash
         status, headers, @response = @app.call(env)
         [status, headers, self]
