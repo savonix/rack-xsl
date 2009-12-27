@@ -33,15 +33,18 @@ module Rack
         [status, headers, self]
       end
     end
+    # Need to get entire response before transforming
     def each(&block)
-        @response.each { |x|
-            if ((x.include? "<html") || !(x.include? "<"))
-                yield x
-            else
-              @xslt.xml = x
-              yield @xslt.serve
-            end
-        }
+      mycontent = ""
+      @response.each { |part|
+          mycontent += part
+      }
+      if ((mycontent.include? "<html") || !(mycontent.include? "<"))
+        yield mycontent
+      else
+        @xslt.xml = mycontent
+        yield @xslt.serve
+      end
     end
     private
     def choosesheet(env)

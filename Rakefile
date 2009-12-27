@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{XSL rack middleware.}
     gem.description = %Q{A rack middleware for transforming XML with XSL.}
     gem.email = "albert.lash@docunext.com"
-    gem.homepage = "http://github.com/docunext/rack-xslview"
+    gem.homepage = "http://www.docunext.com/wiki/Rack-XSLView"
     gem.authors = ["Albert Lash"]
     gem.rubyforge_project = ""
     gem.add_development_dependency "shoulda"
