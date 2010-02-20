@@ -38,8 +38,9 @@ module Rack
         else
           headers.delete('Content-Length')
           @xslt.xml = parts
-          newbody = @xslt.serve
-          headers['Content-Length'] = newbody.length.to_s
+          newbody = []
+          newbody << @xslt.serve
+          headers['Content-Length'] = newbody[0].length.to_s
           [status, headers, newbody]
         end
       end
