@@ -1,7 +1,4 @@
-require 'xml/libxml'
-require 'xml/libxslt'
-
-
+# MIT License
 module Rack
   class XSLView
     def initialize(app, options)
@@ -10,7 +7,7 @@ module Rack
       @myhash = {}
       @options = {:myxsl => nil}.merge(options)
       if @options[:myxsl] == nil
-        @xslt = ::XML::XSLT.new()
+        @xslt = XML::XSLT.new()
         @xslt.xsl = File.join(File.dirname(__FILE__), 'output.xhtml10.xsl')
       else
         @xslt = @options[:myxsl]
@@ -29,23 +26,25 @@ module Rack
           }
           @xslt.parameters = @myhash
         end
-        status, headers, @response = @app.call(env)
-        [status, headers, self]
+        status, headers, body = @app.call(env)
+
+        # Obtain entire request body
+        parts = ''
+        body.each { |part| parts << part.to_s }
+
+        # TODO Refactor
+        if ((parts.include? "<html") || !(parts.include? "<"))
+          [status, headers, body]
+        else
+          headers.delete('Content-Length')
+          @xslt.xml = parts
+          newbody = @xslt.serve
+          headers['Content-Length'] = newbody.length.to_s
+          [status, headers, newbody]
+        end
       end
     end
-    # Need to get entire response before transforming
-    def each(&block)
-      mycontent = ""
-      @response.each { |part|
-          mycontent += part
-      }
-      if ((mycontent.include? "<html") || !(mycontent.include? "<"))
-        yield mycontent
-      else
-        @xslt.xml = mycontent
-        yield @xslt.serve
-      end
-    end
+
     private
     def choosesheet(env)
       @options[:xslhash].each_key { |path|

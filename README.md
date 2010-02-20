@@ -27,14 +27,13 @@ xslhash.default("/path/to/output.xhtml10.xsl")
 
 # Use the middleware
 use Rack::XSLView, :myxsl => default_xsl, :noxsl => noxsl, :xslhash => xslhash
-
-
 </pre>
 
 
 Resources
 ---------
 
+* <http://www.docunext.com/wiki/Rack-XSLView>
 * <http://github.com/docunext/Rack-XSLView>
 
 
