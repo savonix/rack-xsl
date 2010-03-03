@@ -8,7 +8,7 @@ module Rack
       @options = {:myxsl => nil}.merge(options)
       if @options[:myxsl] == nil
         @xslt = XML::XSLT.new()
-        @xslt.xsl = File.join(File.dirname(__FILE__), 'output.xhtml10.xsl')
+        @xslt.xsl = REXML::Document.new '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml"><xsl:import href="http://github.com/docunext/1bb02b59/raw/master/standard.html.xsl"/><xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/></xsl:stylesheet>'
       else
         @xslt = @options[:myxsl]
       end
@@ -18,6 +18,11 @@ module Rack
       if checknoxsl(env)
         @app.call(env)
       else
+        if @options[:reload] == true
+          puts @options[:filepath]
+          @xslt     = XML::XSLT.new()
+          @xslt.xsl = REXML::Document.new @options[:xslfile]
+        end
         unless @options[:passenv] == nil
           @options[:passenv].each { |envkey|
             if (mp = env[envkey])
