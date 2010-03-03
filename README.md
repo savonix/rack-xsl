@@ -32,7 +32,6 @@ use Rack::XSLView,
 </pre>
 
 
-
 Resources
 ---------
 
