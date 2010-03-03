@@ -13,21 +13,24 @@ This is how I would like it to work, but its not there yet:
 
 <pre class="sh_ruby">
 # Create the xslt object
-xslt = ::XML::XSLT.new()
+xslt = XML::XSLT.new()
 
 # Set the default XSL
-xslt.xsl = REXML::Document.new File.open('/path/to/output.xhtml10.xsl')
+xslfile = REXML::Document.new File.open('/path/to/output.xhtml10.xsl').read
+xslt.xsl = xslfile
 
-# Paths to exclude
-noxsl = [/^\/raw/, '/s/js/', '/s/css/']
+omitxsl = ['/raw/', '/s/js/', '/s/css/', '/s/img/']
+passenv = ['PATH_INFO', 'RACK_MOUNT_PATH', 'RACK_ENV']
 
-# NOTE: multiple stylesheets is still in planning
-xslhash = { "/path/alskjddf" => "test.xsl",  /specific\.xml$/ => 'different.xsl' }
-xslhash.default("/path/to/output.xhtml10.xsl")
+use Rack::XSLView,
+  :myxsl => xslt,
+  :noxsl => omitxsl,
+  :passenv => passenv,
+  :xslfile => xslfile,
+  :reload => ENV['RACK_ENV'] == 'development' ? true : false
 
-# Use the middleware
-use Rack::XSLView, :myxsl => default_xsl, :noxsl => noxsl, :xslhash => xslhash
 </pre>
+
 
 
 Resources
