@@ -7,7 +7,6 @@ module Rack
     class XSLViewError < StandardError ; end
 
     def initialize(app, options)
-      @my_path_info = String.new
       @app = app
       @options = {:myxsl => nil}.merge(options)
       if @options[:myxsl].nil?
