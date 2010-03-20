@@ -8,6 +8,7 @@ class RackXslviewTest < Test::Unit::TestCase
 
   end
 
+
   def self.should_not_halt
     should "not halt the rack chain" do
       @app.expects(:call).once
@@ -15,6 +16,15 @@ class RackXslviewTest < Test::Unit::TestCase
     end
   end
 
+  def self.should_be_a_rack_response
+    should 'be a rack a response' do
+      ret = @rack.call(call_args)
+      assert ret.is_a?(Array), 'return value is not a valid rack response'
+      assert_equal 3, ret.size, 'should have 3 arguments'
+    end
+  end
+
+  
   context 'Given an app' do
     setup do
       @app = Class.new { def call(app); true; end }.new
@@ -26,6 +36,7 @@ class RackXslviewTest < Test::Unit::TestCase
         passenv = ['PATH_INFO', 'RACK_MOUNT_PATH']
         @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :passenv => passenv)
       }
+      should_be_a_rack_response
       should_not_halt
     end
     context 'Trying out the xslhash' do
@@ -35,7 +46,7 @@ class RackXslviewTest < Test::Unit::TestCase
         xslhash.default("/path/to/output.xhtml10.xsl")
         @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :xslhash => xslhash)
       }
-      should_not_halt
+      should_be_a_rack_response
     end
   end
 end
