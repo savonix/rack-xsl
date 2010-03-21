@@ -7,19 +7,19 @@ begin
     gem.name = "rack-xslview"
     gem.summary = %Q{XSL rack middleware.}
     gem.description = %Q{A rack middleware for transforming XML with XSL.}
-    gem.email = "albert.lash@docunext.com"
-    gem.homepage = "http://www.docunext.com/wiki/Rack-XSLView"
-    gem.authors = ["Albert Lash"]
-    gem.rubyforge_project = ""
-    gem.add_development_dependency "shoulda"
+    gem.email = 'albert.lash@docunext.com'
+    gem.homepage = 'http://www.docunext.com/wiki/Rack-XSLView'
+    gem.authors = ['Albert Lash']
+    gem.rubyforge_project = ''
+    gem.add_development_dependency 'shoulda'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
   Jeweler::RubyforgeTasks.new do |rubyforge|
-    rubyforge.doc_task = "rdoc"
+    rubyforge.doc_task = 'rdoc'
   end
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+  puts 'Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler'
 end
 
 
@@ -46,6 +46,7 @@ end
 task :test => :check_dependencies
 
 task :default => :test
+task :spec => :test
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|

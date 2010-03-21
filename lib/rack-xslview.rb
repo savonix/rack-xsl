@@ -19,13 +19,18 @@ module Rack
     end
 
     def call(env)
+
       # No matter what, @app will be called
-      status, headers, body = @app.call(env)
+      status, headers, body = original_response = @app.call(env)
+
+      return original_response if (status == 304 || status == 204)
+
+      return original_response unless headers["Content-Type"].to_s.match(/(ht|x)ml/) 
 
       # If setup includes paths to exclude from xslt processing, check them
       checknoxsl(env) if @options[:noxsl]
 
-      # Obtain entire request body, check to make sure it can be processed
+      # Obtain entire request body, ensuring sure it can be processed
       myxml = getResponse(body)
 
       # Should XSL file be reloaded?
@@ -42,7 +47,7 @@ module Rack
         @myhash = {}
         @options[:passenv].each { |envkey|
           # Does env var exist?
-          @myhash[envkey] = "#{mp}" if (mp = env[envkey])
+          @myhash[envkey] = "#{env[envkey]}" if env[envkey]
         }
         @xslt.parameters = @myhash unless @myhash.empty?
       end
@@ -56,8 +61,8 @@ module Rack
       [status, headers, newbody]
 
     rescue XSLViewError
-      # TODO Logging: "Rack XSLView not processed" if env['RACK_ENV'] == 'development'
-      [status, headers, body]
+      # TODO Log: "Rack XSLView not processed" if env['RACK_ENV'] == 'development'
+      original_response
     end
 
     private
@@ -78,7 +83,7 @@ module Rack
     end
     def checkForXml(x)
       # Abort processing if content cannot be processed by libxslt
-      raise XSLViewError if x[0,1] != '<'
+      raise XSLViewError unless x[0] == '<'
       if @options[:excludehtml] == true
         raise XSLViewError if x.include? '<html'
       end
@@ -95,4 +100,3 @@ module Rack
     end
   end
 end
-
