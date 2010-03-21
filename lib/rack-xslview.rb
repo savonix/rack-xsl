@@ -22,8 +22,9 @@ module Rack
 
       # No matter what, @app will be called
       status, headers, body = original_response = @app.call(env)
-
-      return original_response if (status == 304 || status == 204)
+      
+      exluded_status = Array[204, 301, 302, 304]
+      return original_response if exluded_status.include?(status)
 
       return original_response unless headers["Content-Type"].to_s.match(/(ht|x)ml/) 
 
