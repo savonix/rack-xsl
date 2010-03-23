@@ -24,7 +24,7 @@ module Rack
       status, headers, body = original_response = @app.call(env)
       
       exluded_status = Array[204, 301, 302, 304]
-      return original_response if exluded_status.include?(status)
+      return original_response if exluded_status.include?(status) || body.nil?
 
       return original_response unless headers["Content-Type"].to_s.match(/(ht|x)ml/) 
 
@@ -73,14 +73,13 @@ module Rack
       }
     end
     def getResponse(body)
-      raise XSLViewError if body.nil?
-      newbody = ''
+      newbody = []
       body.each { |part|
         # Only check the first chunk to ensure 1) its not HTML and 2) its XML
         checkForXml(part) if newbody.empty?
         newbody << part.to_s
       }
-      return newbody
+      return newbody.join('')
     end
     def checkForXml(x)
       # Abort processing if content cannot be processed by libxslt
