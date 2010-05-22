@@ -24,7 +24,7 @@ module Rack
       status, headers, body = @app.call(env)
       original_response = Array[status, headers, body]
       exluded_status = Array[204, 301, 302, 304]
-      return original_response if exluded_status.include?(status) || body.nil? || body.empty?
+      return original_response if exluded_status.include?(status) || body.nil?
 
       return original_response unless headers["Content-Type"].to_s.match(/(ht|x)ml/) 
 
@@ -33,6 +33,9 @@ module Rack
 
       # Obtain entire request body, ensuring sure it can be processed
       myxml = getResponse(body)
+	
+      # One more check for an empty respone
+      return original_response if myxml.empty?
 
       # Should XSL file be reloaded?
       unless @options[:reload] == true
@@ -89,10 +92,10 @@ module Rack
     end
     def checkForXml(x)
       # Abort processing if content cannot be processed by libxslt
-      puts "test for xml"
-      puts x[0]
+      #puts "test for xml"
+      #puts x[0]
       raise XSLViewError unless x[0] == '<'
-      puts "end xml test"
+      #puts "end xml test"
       if @options[:excludehtml] == true
         raise XSLViewError if x.include? '<html'
       end
