@@ -21,10 +21,10 @@ module Rack
     def call(env)
 
       # No matter what, @app will be called
-      status, headers, body = original_response = @app.call(env)
-      
+      status, headers, body = @app.call(env)
+      original_response = Array[status, headers, body]
       exluded_status = Array[204, 301, 302, 304]
-      return original_response if exluded_status.include?(status) || body.nil?
+      return original_response if exluded_status.include?(status) || body.nil? || body.empty?
 
       return original_response unless headers["Content-Type"].to_s.match(/(ht|x)ml/) 
 
@@ -35,7 +35,7 @@ module Rack
       myxml = getResponse(body)
 
       # Should XSL file be reloaded?
-      if @options[:reload] == true
+      unless @options[:reload] == true
         @xslt     = XML::XSLT.new()
         @xslt.xsl = REXML::Document.new @options[:xslfile]
       end
@@ -59,6 +59,12 @@ module Rack
       # If we've made it this far, we can alter the headers
       headers.delete('Content-Length')
       headers['Content-Length'] = newbody[0].length.to_s
+
+      # Content type override?
+      unless @options[:content_type].nil?
+        headers["Content-Type"] = @options[:content_type]
+      end
+
       [status, headers, newbody]
 
     rescue XSLViewError
@@ -83,7 +89,10 @@ module Rack
     end
     def checkForXml(x)
       # Abort processing if content cannot be processed by libxslt
+      puts "test for xml"
+      puts x[0]
       raise XSLViewError unless x[0] == '<'
+      puts "end xml test"
       if @options[:excludehtml] == true
         raise XSLViewError if x.include? '<html'
       end
