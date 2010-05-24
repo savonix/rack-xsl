@@ -43,7 +43,14 @@ module Rack
         @xslt.xsl = REXML::Document.new @options[:xslfile]
       end
 
-      # Set XML for stylesheet
+      unless @options[:tidy].nil?
+        require 'tidy_ffi'
+        input_xml = myxml.include?('http://www.w3.org/1999/xhtml') ? 0 : 1
+        output = myxml.include?('http://www.w3.org/1999/xhtml') ? 'output_xhtml' : 'output_xml'
+        @options[:tidy][:input_xml] = input_xml
+        @options[:tidy][output.to_sym] = 1
+        myxml = TidyFFI::Tidy.new(myxml, @options[:tidy]).clean
+      end
       @xslt.xml = myxml
 
       # If setup includes env vars to pass through as params, do so
