@@ -49,7 +49,14 @@ module Rack
         output = myxml.include?('http://www.w3.org/1999/xhtml') ? 'output_xhtml' : 'output_xml'
         @options[:tidy][:input_xml] = input_xml
         @options[:tidy][output.to_sym] = 1
-        myxml = TidyFFI::Tidy.new(myxml, @options[:tidy]).clean
+        nuxml = TidyFFI::Tidy.new(myxml, @options[:tidy]).clean
+        nuxml = ''
+        if nuxml == ''
+           input_xml = myxml.include?('http://www.w3.org/1999/xhtml') ? '' : '-xml'
+cmd = %Q~echo | tidy -asxml #{input_xml} -q --doctype "omit" --show-warnings 0 --numeric-entities 1 --drop-proprietary-attributes 1 --preserve-entities 0 --input-encoding "utf8" --char-encoding "utf8" --output-encoding "utf8" --alt-text "" --tidy-mark 0 --logical-emphasis 1 <<THISISITOKOK\n#{myxml}\nTHISISITOKOK }~
+            nuxml = `#{cmd}`
+            myxml = nuxml unless nuxml == ''
+        end
       end
       @xslt.xml = myxml
 
