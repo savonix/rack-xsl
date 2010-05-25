@@ -38,7 +38,7 @@ module Rack
       return original_response if myxml.empty?
 
       # Should XSL file be reloaded?
-      unless @options[:reload] == true
+      if @options[:reload] == true
         @xslt     = XML::XSLT.new()
         @xslt.xsl = REXML::Document.new @options[:xslfile]
       end
