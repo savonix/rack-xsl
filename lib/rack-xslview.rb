@@ -1,6 +1,7 @@
 # Copyright 2010 Savonix Corporation
 # Author Albert L. Lash, IV
 # License MIT
+require 'rexml/document'
 module Rack
   class XSLView
 
@@ -19,7 +20,6 @@ module Rack
     end
 
     def call(env)
-
       # No matter what, @app will be called
       status, headers, body = @app.call(env)
       original_response = Array[status, headers, body]
@@ -102,7 +102,11 @@ module Rack
       # Abort processing if content cannot be processed by libxslt
       #puts "test for xml"
       #puts x[0]
-      raise XSLViewError unless x[0] == '<'
+      if RUBY_VERSION > '1.9'
+        raise XSLViewError unless x[0] == '<'
+      else
+        raise XSLViewError unless x[0] == 60
+      end
       #puts "end xml test"
       if @options[:excludehtml] == true
         raise XSLViewError if x.include? '<html'
