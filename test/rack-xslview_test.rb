@@ -34,7 +34,7 @@ class RackXslviewTest < Test::Unit::TestCase
       setup {
         omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
         passenv = ['PATH_INFO', 'RACK_MOUNT_PATH']
-        @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :passenv => passenv)
+        @rack = Rack::XSL.new(@app, :noxsl => omitpaths, :passenv => passenv)
       }
       should_be_a_rack_response
       should_not_halt
@@ -44,7 +44,7 @@ class RackXslviewTest < Test::Unit::TestCase
         omitpaths = [/^\/raw/, '/s/js/', '/s/css/']
         xslhash = { "/path/alskjddf" => "test.xsl",  /specific\.xml$/ => 'different.xsl' }
         xslhash.default("/path/to/output.xhtml10.xsl")
-        @rack = Rack::XSLView.new(@app, :noxsl => omitpaths, :xslhash => xslhash)
+        @rack = Rack::XSL.new(@app, :noxsl => omitpaths, :xslhash => xslhash)
       }
       should_be_a_rack_response
     end

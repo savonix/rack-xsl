@@ -3,9 +3,9 @@
 # License MIT
 require 'rexml/document'
 module Rack
-  class XSLView
+  class XSL
 
-    class XSLViewError < StandardError ; end
+    class RackXSLError < StandardError ; end
 
     def initialize(app, options)
       @app = app
@@ -78,15 +78,15 @@ module Rack
 
       [status, headers, newbody]
 
-    rescue XSLViewError
-      # TODO Log: "Rack XSLView not processed" if env['RACK_ENV'] == 'development'
+    rescue RackXSLError
+      # TODO Log: "Rack XSL not processed" if env['RACK_ENV'] == 'development'
       original_response
     end
 
     private
     def checknoxsl(env)
       @options[:noxsl].each { |path|
-        raise XSLViewError if env["PATH_INFO"].index(path)
+        raise RackXSLError if env["PATH_INFO"].index(path)
       }
     end
     def getResponse(body)
@@ -103,13 +103,13 @@ module Rack
       #puts "test for xml"
       #puts x[0]
       if RUBY_VERSION > '1.9'
-        raise XSLViewError unless x[0] == '<'
+        raise RackXSLError unless x[0] == '<'
       else
-        raise XSLViewError unless x[0] == 60
+        raise RackXSLError unless x[0] == 60
       end
       #puts "end xml test"
       if @options[:excludehtml] == true
-        raise XSLViewError if x.include? '<html'
+        raise RackXSLError if x.include? '<html'
       end
     end
 
