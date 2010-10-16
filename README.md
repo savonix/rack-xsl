@@ -1,5 +1,4 @@
-Rack XSLView README
-===================
+# Rack XSL README
 
 Summary
 -------
@@ -12,22 +11,30 @@ Configuration
 This is how I would like it to work, but its not there yet:
 
 <pre class="sh_ruby">
-# Create the xslt object
-xslt = XML::XSLT.new()
+require 'xml/xslt'
+require 'rack/xsl'
 
-# Set the default XSL
-xslfile = REXML::Document.new File.open('/path/to/output.xhtml10.xsl').read
-xslt.xsl = xslfile
-
-omitxsl = ['/raw/', '/s/js/', '/s/css/', '/s/img/']
-passenv = ['PATH_INFO', 'RACK_MOUNT_PATH', 'RACK_ENV']
-
+myxslfile = File.dirname(__FILE__) + '/app/views/layouts/xsl/html_main.xsl'
 use Rack::XSLView,
-  :myxsl => xslt,
-  :noxsl => omitxsl,
-  :passenv => passenv,
-  :xslfile => xslfile,
-  :reload => ENV['RACK_ENV'] == 'development' ? true : false
+  :myxsl => XML::XSLT.new(),
+  :noxsl => ['/raw/', '/s/js/', '/s/css/', '/s/img/'],
+  :passenv => ['PATH_INFO', 'RACK_MOUNT_PATH', 'RACK_ENV'],
+  :xslfile => File.open(myxslfile) {|f| f.read },
+  :excludehtml => false,
+  :reload => true,
+  :tidy => {  :doctype => 'omit',
+    :numeric_entities => 1,
+    :drop_proprietary_attributes => 1,
+    :preserve_entities => 0,
+    :input_encoding => 'utf8',
+    :char_encoding => 'utf8',
+    :output_encoding => 'utf8',
+    :error_file => '/tmp/tidyerr.txt',
+    :force_output => 1,
+    :alt_text => '', 
+    :tidy_mark => 0,
+    :logical_emphasis => 1,
+  }
 
 </pre>
 

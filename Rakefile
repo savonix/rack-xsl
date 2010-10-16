@@ -4,9 +4,9 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "rack-xslview"
+    gem.name = "rack-xsl"
     gem.summary = %Q{XSL rack middleware.}
-    gem.description = %Q{A rack middleware for transforming XML with XSL.}
+    gem.description = %Q{Rack middleware for transforming XML with XSL.}
     gem.email = 'albert.lash@docunext.com'
     gem.homepage = 'http://www.docunext.com/wiki/Rack-XSLView'
     gem.authors = ['Albert Lash']
