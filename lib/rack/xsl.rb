@@ -90,6 +90,7 @@ module Rack
       }
     end
     def getResponse(body)
+      return body unless body.respond_to?(:each)
       newbody = []
       body.each { |part|
         # Only check the first chunk to ensure 1) its not HTML and 2) its XML
