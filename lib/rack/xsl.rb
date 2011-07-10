@@ -16,6 +16,7 @@ module Rack
         @xslt.xsl = REXML::Document.new '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml"><xsl:import href="http://github.com/docunext/1bb02b59/raw/master/standard.html.xsl"/><xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/></xsl:stylesheet>'
       else
         @xslt = @options[:myxsl]
+        @xslt.xsl = REXML::Document.new @options[:xslfile]
       end
     end
 
@@ -75,6 +76,9 @@ module Rack
       unless @options[:content_type].nil?
         headers["Content-Type"] = @options[:content_type]
       end
+
+      # Cache control override?
+      headers["Cache-Control"] = @options[:cache_control] if @options.has_key?(:cache_control)
 
       [status, headers, newbody]
 
