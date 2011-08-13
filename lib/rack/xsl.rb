@@ -34,6 +34,7 @@ module Rack
 
       # Obtain entire request body, ensuring sure it can be processed
       myxml = getResponse(body)
+      body.close if body.respond_to?(:close)
 	
       # One more check for an empty respone
       return original_response if myxml.empty?

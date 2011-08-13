@@ -5,6 +5,7 @@ Summary
 
 A rack middleware for transforming XML with XSL.
 
+
 Configuration
 -------------
 
