@@ -13,7 +13,8 @@ module Rack
       if @options[:myxsl].nil?
         require 'rexml/document'
         @xslt = XML::XSLT.new()
-        @xslt.xsl = REXML::Document.new '../lib/output.xhtml10.xsl'
+        myfile = File.new('../lib/output.xhtml.xsl')
+        @xslt.xsl = REXML::Document.new myfile
       else
         @xslt = @options[:myxsl]
         @xslt.xsl = REXML::Document.new @options[:xslfile]
