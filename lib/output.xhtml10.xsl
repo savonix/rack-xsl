@@ -22,7 +22,7 @@ limitations under the License.
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns="http://www.w3.org/1999/xhtml">
 
-<xsl:import href="http://github.com/docunext/1bb02b59/raw/master/standard.html.xsl"/>
+<xsl:import href="standard.html.xsl"/>
 
 
 <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no"
