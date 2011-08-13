@@ -13,7 +13,7 @@ module Rack
       if @options[:myxsl].nil?
         require 'rexml/document'
         @xslt = XML::XSLT.new()
-        @xslt.xsl = REXML::Document.new '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml"><xsl:import href="http://github.com/docunext/1bb02b59/raw/master/standard.html.xsl"/><xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/></xsl:stylesheet>'
+        @xslt.xsl = REXML::Document.new '../lib/output.xhtml10.xsl'
       else
         @xslt = @options[:myxsl]
         @xslt.xsl = REXML::Document.new @options[:xslfile]
