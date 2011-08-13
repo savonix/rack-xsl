@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rake'
+gem 'ruby-xslt', :require => 'xml/xslt'
 
 group :test do
   gem 'shoulda'
