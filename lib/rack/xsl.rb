@@ -46,9 +46,15 @@ module Rack
         @xslt.xsl = REXML::Document.new @options[:xslfile]
       end
 
+      # Change <hr> and <br> to self-close?
+      unless @options[:xhtml5].nil?
+        myxml.gsub!(/<([hb]r)>/,'<\1/>')
+      end
+
+      # Tidy up this mess?
       unless @options[:tidy].nil?
         input_xml = myxml.include?('http://www.w3.org/1999/xhtml') ? 0 : 1
-        output = myxml.include?('http://www.w3.org/1999/xhtml') ? 'output_xhtml' : 'output_xml'
+        output = input_xml == 1 ? 'output_xhtml' : 'output_xml'
         @options[:tidy][:input_xml] = input_xml
         @options[:tidy][output.to_sym] = 1
         nuxml = ''
